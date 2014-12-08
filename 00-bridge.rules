@@ -1,0 +1,7 @@
+# UDEV Rules automatically start a shell on a USB Serial device.
+#
+# This file must be placed at:
+#
+# /etc/udev/rules.d/00-bridge.rules
+#
+KERNEL=="ttyACM*", RUN+="/usr/bin/run-bridge-udev", ENV{ID_MM_DEVICE_IGNORE}="1", ENV{MTP_NO_PROBE}="1"

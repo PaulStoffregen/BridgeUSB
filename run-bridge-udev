@@ -1,0 +1,47 @@
+#!/bin/sh
+
+
+
+usb_vid=16c0
+usb_pid=0483
+#usb_sernum=228960
+baud=115200  # ignored by /dev/ttyACM# devices, needed for real serial
+
+
+#ACTION=add
+#DEVNAME=/dev/ttyACM0
+#ID_VENDOR_ID=16c0
+#ID_MODEL_ID=0483
+#ID_SERIAL_SHORT=228960
+
+# Testing: Uncomment to see info udev is providing
+#/usr/bin/printenv > /tmp/env.txt
+
+# udev must tell us the device name
+if [ -z "$DEVNAME" ]; then 
+  exit 0
+fi
+# only run if the udev action is adding the device
+if [ "$ACTION" != "add" ]; then
+  exit 0
+fi
+# if USB vendor ID known, it must match
+if ! [ -z ${usb_vid+x} ] && [ "$usb_vid" != "$ID_VENDOR_ID" ]; then
+  exit 0
+fi
+# if USB product ID known, it must match
+if ! [ -z ${usb_pid+x} ] && [ "$usb_pid" != "$ID_MODEL_ID" ]; then
+  exit 0
+fi
+# if USB vendor ID known, it must match
+if ! [ -z ${usb_sernum+x} ] && [ "$usb_sernum" != "$ID_SERIAL_SHORT" ]; then
+  exit 0
+fi
+
+DEV=${DEVNAME##*/}
+
+(while test -w $DEVNAME; do 
+    /sbin/getty -8 -c -L -a root $baud $DEV
+done) &
+
+exit 0

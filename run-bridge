@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd /usr/lib/bridge
+
+exec /usr/bin/python2.7 -u bridge.py 2> /tmp/bridge.py-stderr.log
+
